@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       
       try {
-        const response = await axios.get('/auth/me');
+        const response = await axios.get('http://localhost:5000/api/auth/me');
         setUser(response.data.data);
       } catch (error) {
         console.error('Authentication check failed:', error);
@@ -48,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('/auth/login', { email, password });
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
       const { token, user } = response.data;
       
       localStorage.setItem('token', token);
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (name: string, email: string, password: string, role: string) => {
     try {
-      const response = await axios.post('/auth/register', { name, email, password, role });
+      const response = await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role });
       const { token, user } = response.data;
       
       localStorage.setItem('token', token);
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await axios.get('/auth/logout');
+      await axios.get('http://localhost:5000/api/auth/logout');
       localStorage.removeItem('token');
       setUser(null);
       

@@ -25,18 +25,18 @@ export default function TutorProfile({ params }: { params: { id: string } }) {
       try {
         setLoading(true);
         // Fetch tutor details
-        const tutorResponse = await axios.get(`/users/${params.id}`);
+        const tutorResponse = await axios.get(`http://localhost:5000/api/users/${params.id}`);
         setTutor(tutorResponse.data.data);
         
         // Fetch tutor reviews
-        const reviewsResponse = await axios.get(`/reviews/tutor/${params.id}`);
+        const reviewsResponse = await axios.get(`http://localhost:5000/api/reviews/tutor/${params.id}`);
         setReviews(reviewsResponse.data.data);
         
         // Fetch subjects if available
         if (tutorResponse.data.data.subjects && tutorResponse.data.data.subjects.length > 0) {
           const subjectsData = await Promise.all(
             tutorResponse.data.data.subjects.map((subjectId: string) => 
-              axios.get(`/subjects/${subjectId}`)
+              axios.get(`http://localhost:5000/api/subjects/${subjectId}`)
             )
           );
           setSubjects(subjectsData.map((res: any) => res.data.data));

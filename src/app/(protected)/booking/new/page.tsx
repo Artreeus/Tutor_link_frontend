@@ -46,14 +46,14 @@ export default function NewBooking() {
       
       try {
         // Fetch tutor details
-        const tutorResponse = await axios.get(`/users/${tutorId}`);
+        const tutorResponse = await axios.get(`http://localhost:5000/api/users/${tutorId}`);
         setTutor(tutorResponse.data.data);
         
         // Fetch subjects
         if (tutorResponse.data.data.subjects && tutorResponse.data.data.subjects.length > 0) {
           const subjectsData = await Promise.all(
             tutorResponse.data.data.subjects.map((subjectId: string) => 
-              axios.get(`/subjects/${subjectId}`)
+              axios.get(`http://localhost:5000/api//subjects/${subjectId}`)
             )
           );
           const subjectsList = subjectsData.map((res: any) => res.data.data);
@@ -86,7 +86,7 @@ export default function NewBooking() {
     setSubmitting(true);
     
     try {
-      const response = await axios.post('/bookings', {
+      const response = await axios.post('http://localhost:5000/api//bookings', {
         tutor: tutor._id,
         subject: selectedSubject,
         date,

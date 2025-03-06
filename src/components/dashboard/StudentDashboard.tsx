@@ -14,7 +14,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get('/bookings');
+        const response = await axios.get('http://localhost:5000/api/bookings');
         setBookings(response.data.data);
       } catch (error) {
         console.error('Error fetching bookings:', error);

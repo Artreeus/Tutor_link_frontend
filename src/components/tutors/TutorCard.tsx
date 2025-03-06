@@ -37,8 +37,12 @@ const TutorCard = ({ tutor }: TutorCardProps) => {
               <FaBook className="mr-2" /> Subjects
             </h3>
             <div className="flex flex-wrap gap-2 mt-2">
+              {/* The issue is likely in this mapping */}
               {tutor.subjects.map((subject, index) => (
-                <span key={index} className="badge badge-primary">{subject}</span>
+                <span key={index} className="badge badge-primary">
+                  {/* Check if subject is a string or an object */}
+                  {typeof subject === 'string' ? subject : (subject as any).name}
+                </span>
               ))}
             </div>
           </div>

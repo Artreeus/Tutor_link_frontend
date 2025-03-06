@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import axios from '@/lib/axios';
-import { Booking } from '@/types/booking';
-import { FaCalendarAlt, FaStar, FaDollarSign } from 'react-icons/fa';
-import toast from 'react-hot-toast';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import axios from "@/lib/axios";
+import { Booking } from "@/types/booking";
+import { FaCalendarAlt, FaStar, FaDollarSign } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const TutorDashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -20,17 +20,21 @@ const TutorDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bookingsResponse = await axios.get('/bookings');
+        const bookingsResponse = await axios.get("http://localhost:5000/api/bookings");
         setBookings(bookingsResponse.data.data);
-        
+
         // Calculate stats
-        const pending = bookingsResponse.data.data.filter((b: Booking) => b.status === 'pending').length;
-        const completed = bookingsResponse.data.data.filter((b: Booking) => b.status === 'completed').length;
-        
+        const pending = bookingsResponse.data.data.filter(
+          (b: Booking) => b.status === "pending"
+        ).length;
+        const completed = bookingsResponse.data.data.filter(
+          (b: Booking) => b.status === "completed"
+        ).length;
+
         // Get user profile to get rating and earnings
-        const profileResponse = await axios.get('/auth/me');
+        const profileResponse = await axios.get("http://localhost:5000/api/auth/me");
         const profile = profileResponse.data.data;
-        
+
         setStats({
           pendingBookings: pending,
           completedBookings: completed,
@@ -38,8 +42,8 @@ const TutorDashboard = () => {
           averageRating: profile.averageRating || 0,
         });
       } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Failed to load your dashboard data');
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load your dashboard data");
       } finally {
         setLoading(false);
       }
@@ -49,27 +53,39 @@ const TutorDashboard = () => {
   }, []);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
-  const handleBookingAction = async (bookingId: string, action: 'confirm' | 'cancel') => {
+  const handleBookingAction = async (
+    bookingId: string,
+    action: "confirm" | "cancel"
+  ) => {
     try {
-      await axios.put(`/bookings/${bookingId}`, {
-        status: action === 'confirm' ? 'confirmed' : 'cancelled'
+      await axios.put(`http://localhost:5000/api/bookings/${bookingId}`, {
+        status: action === "confirm" ? "confirmed" : "cancelled",
       });
-      
+
       // Update booking status in the UI
-      setBookings(bookings.map(booking => 
-        booking._id === bookingId 
-          ? { ...booking, status: action === 'confirm' ? 'confirmed' : 'cancelled' } 
-          : booking
-      ));
-      
-      toast.success(`Booking ${action === 'confirm' ? 'confirmed' : 'cancelled'} successfully`);
+      setBookings(
+        bookings.map((booking) =>
+          booking._id === bookingId
+            ? {
+                ...booking,
+                status: action === "confirm" ? "confirmed" : "cancelled",
+              }
+            : booking
+        )
+      );
+
+      toast.success(
+        `Booking ${
+          action === "confirm" ? "confirmed" : "cancelled"
+        } successfully`
+      );
     } catch (error) {
       console.error(`Error ${action}ing booking:`, error);
       toast.error(`Failed to ${action} booking`);
@@ -78,14 +94,14 @@ const TutorDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed':
-        return 'badge-success';
-      case 'completed':
-        return 'badge-info';
-      case 'cancelled':
-        return 'badge-error';
+      case "confirmed":
+        return "badge-success";
+      case "completed":
+        return "badge-info";
+      case "cancelled":
+        return "badge-error";
       default:
-        return 'badge-warning';
+        return "badge-warning";
     }
   };
 
@@ -133,7 +149,7 @@ const TutorDashboard = () => {
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Recent Booking Requests</h2>
-          
+
           {loading ? (
             <div className="flex justify-center py-8">
               <span className="loading loading-spinner loading-lg"></span>
@@ -155,36 +171,52 @@ const TutorDashboard = () => {
                   {bookings.map((booking) => (
                     <tr key={booking._id}>
                       <td>
-                        {typeof booking.student === 'object' ? booking.student.name : 'Loading...'}
+                        {typeof booking.student === "object" && booking.student
+                          ? booking.student.name
+                          : "Loading..."}
                       </td>
                       <td>
-                        {typeof booking.subject === 'object' ? booking.subject.name : 'Loading...'}
+                        {typeof booking.subject === "object" && booking.subject
+                          ? booking.subject.name
+                          : "Loading..."}
                       </td>
                       <td>{formatDate(booking.date)}</td>
-                      <td>{booking.startTime} - {booking.endTime}</td>
                       <td>
-                        <span className={`badge ${getStatusColor(booking.status)}`}>
-                          {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                        {booking.startTime} - {booking.endTime}
+                      </td>
+                      <td>
+                        <span
+                          className={`badge ${getStatusColor(booking.status)}`}
+                        >
+                          {booking.status.charAt(0).toUpperCase() +
+                            booking.status.slice(1)}
                         </span>
                       </td>
                       <td>
-                        {booking.status === 'pending' ? (
+                        {booking.status === "pending" ? (
                           <div className="flex gap-2">
-                            <button 
+                            <button
                               className="btn btn-xs btn-success"
-                              onClick={() => handleBookingAction(booking._id, 'confirm')}
+                              onClick={() =>
+                                handleBookingAction(booking._id, "confirm")
+                              }
                             >
                               Accept
                             </button>
-                            <button 
+                            <button
                               className="btn btn-xs btn-error"
-                              onClick={() => handleBookingAction(booking._id, 'cancel')}
+                              onClick={() =>
+                                handleBookingAction(booking._id, "cancel")
+                              }
                             >
                               Decline
                             </button>
                           </div>
                         ) : (
-                          <Link href={`/dashboard/bookings/${booking._id}`} className="btn btn-xs btn-primary">
+                          <Link
+                            href={`/dashboard/bookings/${booking._id}`}
+                            className="btn btn-xs btn-primary"
+                          >
                             View
                           </Link>
                         )}

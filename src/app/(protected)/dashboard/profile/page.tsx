@@ -2,33 +2,34 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { FaUser, FaEnvelope, FaDollarSign, FaBook } from 'react-icons/fa';
 
-// Define different schema based on user role
+// Define the base schema first
 const baseProfileSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address'),
   bio: z.string().optional(),
 });
 
+// Define schema for students (same as base)
+const studentProfileSchema = baseProfileSchema;
+
+// Define schema for tutors
 const tutorProfileSchema = baseProfileSchema.extend({
-  hourlyRate: z.number().min(0, 'Hourly rate cannot be negative'),
-  subjects: z.array(z.string()).optional(),
-  availability: z.array(z.object({
-    day: z.string(),
-    slots: z.array(z.object({
-      startTime: z.string(),
-      endTime: z.string(),
-    })),
-  })).optional(),
+  hourlyRate: z.preprocess(
+    // Convert string to number for validation
+    (val) => (val === '' ? 0 : Number(val)),
+    z.number().min(0, 'Hourly rate cannot be negative')
+  ),
 });
 
-type BaseProfileFormData = z.infer<typeof baseProfileSchema>;
+// Create types from schemas
+type StudentProfileFormData = z.infer<typeof studentProfileSchema>;
 type TutorProfileFormData = z.infer<typeof tutorProfileSchema>;
 
 export default function Profile() {
@@ -39,34 +40,37 @@ export default function Profile() {
   
   const isTutor = user?.role === 'tutor';
   
+  // Use the appropriate schema based on user role
+  const formSchema = isTutor ? tutorProfileSchema : studentProfileSchema;
+  
   const {
     register,
     handleSubmit,
     setValue,
-    control,
     formState: { errors },
-  } = useForm<BaseProfileFormData | TutorProfileFormData>({
-    resolver: zodResolver(isTutor ? tutorProfileSchema : baseProfileSchema),
+    reset,
+  } = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      bio: user?.bio || '',
-      ...(isTutor && {
-        hourlyRate: user?.hourlyRate || 0,
-      }),
+      name: '',
+      email: '',
+      bio: '',
+      ...(isTutor && { hourlyRate: 0 }),
     },
   });
 
   useEffect(() => {
     if (user) {
-      setValue('name', user.name);
-      setValue('email', user.email);
-      setValue('bio', user.bio || '');
-      console.log(user)
+      // Reset form with user data when it's available
+      reset({
+        name: user.name,
+        email: user.email,
+        bio: user.bio || '',
+        ...(isTutor && { hourlyRate: user.hourlyRate || 0 }),
+      });
       
-      if (isTutor) {
-        setValue('hourlyRate', user.hourlyRate || 0);
-        setSelectedSubjects(user.subjects || []);
+      if (isTutor && user.subjects) {
+        setSelectedSubjects(Array.isArray(user.subjects) ? user.subjects : []);
       }
     }
     
@@ -74,7 +78,7 @@ export default function Profile() {
     if (isTutor) {
       const fetchSubjects = async () => {
         try {
-          const response = await axios.get('/subjects');
+          const response = await axios.get('http://localhost:5000/api/subjects');
           setSubjects(response.data.data);
         } catch (error) {
           console.error('Error fetching subjects:', error);
@@ -84,60 +88,56 @@ export default function Profile() {
       
       fetchSubjects();
     }
-  }, [user, setValue, isTutor]);
+  }, [user, reset, isTutor]);
 
-  const onSubmit = async (data: BaseProfileFormData | TutorProfileFormData) => {
-    console.log('User ID:', user?._id); // Confirm the ID
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
+    
+    // Debug logging
+    console.log("Current user object:", user);
+    console.log("Is user defined?", !!user);
+    console.log("User ID value:", user?._id);
+    console.log("User ID type:", typeof user?._id);
     
     try {
       // Ensure we're using the correct user ID
-      const userId = user?._id;
+      const userId = user?.id || user?._id;
       
       if (!userId) {
         toast.error('User ID is missing');
+        console.error("User ID is missing. Full user object:", user);
+        setIsSubmitting(false);
         return;
       }
   
+      // Create the appropriate payload based on user role
       const profileData = {
-        ...(isTutor ? {
-          name: data.name,
-          email: data.email,
-          bio: data.bio,
-          hourlyRate: (data as TutorProfileFormData).hourlyRate,
+        name: data.name,
+        bio: data.bio || '',
+        ...(isTutor && {
+          hourlyRate: parseFloat(data.hourlyRate),
           subjects: selectedSubjects,
-          availability: (data as TutorProfileFormData).availability
-        } : {
-          name: data.name,
-          email: data.email,
-          bio: data.bio
-        })
+        }),
       };
   
-      console.log('Sending profile update:', {
-        userId,
-        profileData
-      });
+      console.log('Sending profile update:', profileData);
   
-      const response = await axios.put(`http://localhost:5000/api/users/${userId}`, profileData);
+      // Update user profile
+      await axios.put(`http://localhost:5000/api/users/${userId}`, profileData);
+      
+      // If user is a tutor, also update tutor-specific profile
+      if (isTutor) {
+        await axios.put(`http://localhost:5000/api/users/${userId}`, {
+          bio: data.bio || '',
+          hourlyRate: parseFloat(data.hourlyRate),
+          subjects: selectedSubjects,
+        });
+      }
       
       toast.success('Profile updated successfully');
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Full error details:', {
-          response: error.response,
-          message: error.message,
-          config: error.config
-        });
-        
-        toast.error(
-          error.response?.data?.message || 
-          'Failed to update profile'
-        );
-      } else {
-        console.error('Unexpected error:', error);
-        toast.error('An unexpected error occurred');
-      }
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +180,7 @@ export default function Profile() {
                 />
                 {errors.name && (
                   <label className="label">
-                    <span className="label-text-alt text-error">{errors.name.message}</span>
+                    <span className="label-text-alt text-error">{errors.name.message as string}</span>
                   </label>
                 )}
               </div>
@@ -193,15 +193,10 @@ export default function Profile() {
                 </label>
                 <input 
                   type="email" 
-                  className={`input input-bordered ${errors.email ? 'input-error' : ''}`}
+                  className="input input-bordered"
                   disabled // Email cannot be changed
                   {...register('email')}
                 />
-                {errors.email && (
-                  <label className="label">
-                    <span className="label-text-alt text-error">{errors.email.message}</span>
-                  </label>
-                )}
               </div>
             </div>
             
@@ -216,7 +211,7 @@ export default function Profile() {
               ></textarea>
               {errors.bio && (
                 <label className="label">
-                  <span className="label-text-alt text-error">{errors.bio.message}</span>
+                  <span className="label-text-alt text-error">{errors.bio.message as string}</span>
                 </label>
               )}
             </div>
@@ -234,11 +229,13 @@ export default function Profile() {
                     step="0.01"
                     min="0"
                     className={`input input-bordered ${errors.hourlyRate ? 'input-error' : ''}`}
-                    {...register('hourlyRate', { valueAsNumber: true })}
+                    {...register('hourlyRate')}
                   />
                   {errors.hourlyRate && (
                     <label className="label">
-                      <span className="label-text-alt text-error">{(errors as any).hourlyRate.message}</span>
+                      <span className="label-text-alt text-error">
+                        {errors.hourlyRate.message as string}
+                      </span>
                     </label>
                   )}
                 </div>
@@ -263,8 +260,6 @@ export default function Profile() {
                     ))}
                   </div>
                 </div>
-                
-                {/* Availability section would go here - more complex UI */}
               </>
             )}
             

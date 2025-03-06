@@ -29,7 +29,7 @@ export default function BrowseTutors() {
         if (filters.priceRange) params.append('price', filters.priceRange);
         if (searchTerm) params.append('name', searchTerm);
         
-        const response = await axios.get(`/users/tutors?${params.toString()}`);
+        const response = await axios.get(`http://localhost:5000/api/users/tutors?${params.toString()}`);
         setTutors(response.data.data);
       } catch (error) {
         console.error('Error fetching tutors:', error);
