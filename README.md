@@ -1,4 +1,3 @@
-﻿# Tutor_link_frontend
 # TutorLink - Find & Connect with the Best Tutors
 
 A comprehensive tutoring platform that connects students with qualified tutors. This project consists of a backend API built with Node.js/Express and a frontend application built with Next.js.
