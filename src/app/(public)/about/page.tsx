@@ -55,7 +55,7 @@ export default function About() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={sectionVariants}
+        
         className="container mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center"
       >
         <div>
@@ -87,7 +87,7 @@ export default function About() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={sectionVariants}
+        
         className="bg-white py-16"
       >
         <div className="container mx-auto px-4">
@@ -124,7 +124,7 @@ export default function About() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={sectionVariants}
+        
         className="container mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center"
       >
         <div className="relative">
@@ -163,7 +163,7 @@ export default function About() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={sectionVariants}
+        
         className="bg-white py-16"
       >
         <div className="container mx-auto px-4 text-center">
@@ -185,7 +185,7 @@ export default function About() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={sectionVariants}
+        
         className="bg-[#4f46e5] text-white my-16 py-16 container mx-auto "
       >
         <div className="container mx-auto px-4 text-center">

@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Original Colors
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -50,6 +51,17 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+
+        // New Brand Color
+        primary: '#FF6636',  // Overwrites the default primary color
+
+        // Recommended Neutrals
+        dark: '#1E2022',      // For headings and primary text
+        medium: '#525252',    // For subtitles and body text
+        light: '#F9FAFB',     // For section backgrounds
+
+        // Accent Color
+        accent: '#005A9C',     // For secondary links or highlights
       },
       borderRadius: {
         lg: 'var(--radius)',
