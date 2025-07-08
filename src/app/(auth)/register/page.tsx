@@ -67,141 +67,253 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-8">
-      <div className="card w-full max-w-md bg-white shadow-xl rounded-xl">
-        <div className="card-body p-8">
-          <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Create an Account</h1>
-          
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="label-text text-gray-700">Full Name</span>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-orange-50 to-orange-100 py-8 px-4">
+      <div className="w-full max-w-md">
+        {/* Header with animated gradient */}
+        <div className="text-center mb-8">
+          <div className="inline-block p-3 bg-gradient-to-r from-[#FF6636] to-orange-500 rounded-2xl shadow-lg mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <h1 className="text-4xl font-black text-gray-900 mb-2">Join Us</h1>
+          <p className="text-gray-600">Create your account to get started</p>
+        </div>
+
+        {/* Main card with glass effect */}
+        <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 transition-all duration-300 hover:shadow-3xl">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name Field */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-[#FF6636]">
+                Full Name
               </label>
-              <input 
-                type="text" 
-                placeholder="John Doe" 
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none 
-                  ${errors.name 
-                    ? 'border-red-500 focus:ring-2 focus:ring-red-200' 
-                    : 'border-gray-300 focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/30'}`}
-                {...register('name')}
-              />
+              <div className="relative">
+                <input 
+                  type="text" 
+                  placeholder="Enter your full name" 
+                  className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl focus:outline-none transition-all duration-300 placeholder-gray-400
+                    ${errors.name 
+                      ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/20' 
+                      : 'border-gray-200 focus:border-[#FF6636] focus:ring-4 focus:ring-[#FF6636]/20 hover:border-gray-300'}`}
+                  {...register('name')}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+              </div>
               {errors.name && (
-                <label className="label">
-                  <span className="label-text-alt text-red-500">{errors.name.message}</span>
-                </label>
+                <p className="mt-2 text-sm text-red-500 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {errors.name.message}
+                </p>
               )}
             </div>
             
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="label-text text-gray-700">Email</span>
+            {/* Email Field */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-[#FF6636]">
+                Email Address
               </label>
-              <input 
-                type="email" 
-                placeholder="email@example.com" 
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none 
-                  ${errors.email 
-                    ? 'border-red-500 focus:ring-2 focus:ring-red-200' 
-                    : 'border-gray-300 focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/30'}`}
-                {...register('email')}
-              />
+              <div className="relative">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email address" 
+                  className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl focus:outline-none transition-all duration-300 placeholder-gray-400
+                    ${errors.email 
+                      ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/20' 
+                      : 'border-gray-200 focus:border-[#FF6636] focus:ring-4 focus:ring-[#FF6636]/20 hover:border-gray-300'}`}
+                  {...register('email')}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                  </svg>
+                </div>
+              </div>
               {errors.email && (
-                <label className="label">
-                  <span className="label-text-alt text-red-500">{errors.email.message}</span>
-                </label>
+                <p className="mt-2 text-sm text-red-500 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {errors.email.message}
+                </p>
               )}
             </div>
             
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="label-text text-gray-700">Password</span>
+            {/* Password Field */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-[#FF6636]">
+                Password
               </label>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none 
-                  ${errors.password 
-                    ? 'border-red-500 focus:ring-2 focus:ring-red-200' 
-                    : 'border-gray-300 focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/30'}`}
-                {...register('password')}
-              />
+              <div className="relative">
+                <input 
+                  type="password" 
+                  placeholder="Create a strong password" 
+                  className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl focus:outline-none transition-all duration-300 placeholder-gray-400
+                    ${errors.password 
+                      ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/20' 
+                      : 'border-gray-200 focus:border-[#FF6636] focus:ring-4 focus:ring-[#FF6636]/20 hover:border-gray-300'}`}
+                  {...register('password')}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+              </div>
               {errors.password && (
-                <label className="label">
-                  <span className="label-text-alt text-red-500">{errors.password.message}</span>
-                </label>
+                <p className="mt-2 text-sm text-red-500 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {errors.password.message}
+                </p>
               )}
             </div>
             
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="label-text text-gray-700">Confirm Password</span>
+            {/* Confirm Password Field */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2 transition-colors group-focus-within:text-[#FF6636]">
+                Confirm Password
               </label>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none 
-                  ${errors.confirmPassword 
-                    ? 'border-red-500 focus:ring-2 focus:ring-red-200' 
-                    : 'border-gray-300 focus:border-[#4f46e5] focus:ring-2 focus:ring-[#4f46e5]/30'}`}
-                {...register('confirmPassword')}
-              />
+              <div className="relative">
+                <input 
+                  type="password" 
+                  placeholder="Confirm your password" 
+                  className={`w-full px-4 py-3 bg-white/50 border-2 rounded-xl focus:outline-none transition-all duration-300 placeholder-gray-400
+                    ${errors.confirmPassword 
+                      ? 'border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/20' 
+                      : 'border-gray-200 focus:border-[#FF6636] focus:ring-4 focus:ring-[#FF6636]/20 hover:border-gray-300'}`}
+                  {...register('confirmPassword')}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
               {errors.confirmPassword && (
-                <label className="label">
-                  <span className="label-text-alt text-red-500">{errors.confirmPassword.message}</span>
-                </label>
+                <p className="mt-2 text-sm text-red-500 flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
             
-            <div className="form-control mb-6">
-              <label className="label">
-                <span className="label-text text-gray-700">I want to register as</span>
+            {/* Role Selection */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                Choose Your Role
               </label>
-              <div className="flex gap-4">
-                <label className="label cursor-pointer justify-start gap-2">
+              <div className="grid grid-cols-2 gap-3">
+                <label className={`relative cursor-pointer rounded-xl p-4 border-2 transition-all duration-300 ${
+                  role === 'student' 
+                    ? 'border-[#FF6636] bg-[#FF6636]/5 shadow-lg' 
+                    : 'border-gray-200 bg-white/50 hover:border-gray-300'
+                }`}>
                   <input 
                     type="radio" 
-                    className="accent-[#4f46e5]" 
+                    className="sr-only" 
                     value="student"
-                    checked={role === 'student'}
                     {...register('role')}
                   />
-                  <span className="label-text text-gray-700">Student</span>
+                  <div className="text-center">
+                    <svg className={`w-6 h-6 mx-auto mb-2 ${role === 'student' ? 'text-[#FF6636]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <span className={`text-sm font-medium ${role === 'student' ? 'text-[#FF6636]' : 'text-gray-600'}`}>Student</span>
+                  </div>
+                  {role === 'student' && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-4 h-4 text-[#FF6636]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
                 </label>
-                <label className="label cursor-pointer justify-start gap-2">
+                
+                <label className={`relative cursor-pointer rounded-xl p-4 border-2 transition-all duration-300 ${
+                  role === 'tutor' 
+                    ? 'border-[#FF6636] bg-[#FF6636]/5 shadow-lg' 
+                    : 'border-gray-200 bg-white/50 hover:border-gray-300'
+                }`}>
                   <input 
                     type="radio" 
-                    className="accent-[#FF6636]" 
+                    className="sr-only" 
                     value="tutor"
-                    checked={role === 'tutor'}
                     {...register('role')}
                   />
-                  <span className="label-text text-gray-700">Tutor</span>
+                  <div className="text-center">
+                    <svg className={`w-6 h-6 mx-auto mb-2 ${role === 'tutor' ? 'text-[#FF6636]' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <span className={`text-sm font-medium ${role === 'tutor' ? 'text-[#FF6636]' : 'text-gray-600'}`}>Tutor</span>
+                  </div>
+                  {role === 'tutor' && (
+                    <div className="absolute top-2 right-2">
+                      <svg className="w-4 h-4 text-[#FF6636]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  )}
                 </label>
               </div>
             </div>
             
-            <div className="form-control mt-6">
-              <button 
-                type="submit" 
-                className={`w-full py-3 rounded-lg text-white font-semibold 
-                  ${role === 'student' ? 'bg-[#4f46e5] hover:bg-[#4f46e5]/90' : 'bg-[#FF6636] hover:bg-[#FF6636]/90'}
-                  ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Creating account...' : 'Register'}
-              </button>
-            </div>
+            {/* Submit Button */}
+            <button 
+              type="submit" 
+              className="w-full py-4 px-6 bg-gradient-to-r from-[#FF6636] to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Account...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <span>Create Account</span>
+                  <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
+              )}
+            </button>
           </form>
           
-          <div className="divider text-gray-500 before:bg-gray-300 after:bg-gray-300 my-6">OR</div>
+          {/* Divider */}
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white/70 text-gray-500 font-medium">Already have an account?</span>
+            </div>
+          </div>
           
-          <p className="text-center text-gray-700">
-            Already have an account?{' '}
-            <Link href="/login" className="text-[#4f46e5] hover:underline">
-              Login
+          {/* Login Link */}
+          <div className="text-center">
+            <Link 
+              href="/login" 
+              className="inline-flex items-center text-[#FF6636] hover:text-orange-500 font-semibold transition-colors duration-300"
+            >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+              Sign in to your account
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>

@@ -53,7 +53,6 @@ const config: Config = {
         },
 
         // New Brand Color
-        primary: '#FF6636',  // Overwrites the default primary color
 
         // Recommended Neutrals
         dark: '#1E2022',      // For headings and primary text
@@ -61,7 +60,6 @@ const config: Config = {
         light: '#F9FAFB',     // For section backgrounds
 
         // Accent Color
-        accent: '#005A9C',     // For secondary links or highlights
       },
       borderRadius: {
         lg: 'var(--radius)',
